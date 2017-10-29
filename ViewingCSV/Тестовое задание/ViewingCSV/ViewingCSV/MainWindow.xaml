@@ -1,0 +1,134 @@
+﻿<Window x:Class="ViewingCSV.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ViewingCSV"        
+        mc:Ignorable="d"
+        Title="Загрузка и просмотр данных из CSV" Icon="Images/CSV-48.png" FontFamily="Century Gothic" MinWidth="1100" MinHeight="700">
+    <Grid>
+        <Grid Name="Uploading" Visibility="Visible">
+            <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <Label FontWeight="Bold" HorizontalAlignment="Center" FontSize="24">Выберите *.CSV файл</Label>
+                <WrapPanel>
+                    <Button Margin="1,2,1,2" Width="150" HorizontalAlignment="Left" Click="Select_Click" IsEnabled="False" Name="Choose_Button">
+                        <WrapPanel>
+                            <Image Source="Images/Checked Checkbox 2-48.png" Width="30"></Image>
+                            <Label HorizontalAlignment="Center" HorizontalContentAlignment="Center" FontSize="20">Выбрать...</Label>
+                        </WrapPanel>
+                    </Button>
+                    <Label FontSize="20" Name="NameFile"/>
+                    <Button Margin="1,2,1,2" Click="UploadFile_Click">
+                        <WrapPanel>
+                            <Image Source="Images/Downloads-48.png" Width="30"/>
+                            <Label HorizontalAlignment="Center" HorizontalContentAlignment="Center" FontSize="20">Загрузить файл</Label>
+                        </WrapPanel>
+                    </Button>
+                </WrapPanel>
+
+            </StackPanel>
+        </Grid>
+        <Grid Name="Mapping" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label FontSize="30" Content="{Binding ElementName=NameFile, Path=Content}" HorizontalAlignment="Center" FontWeight="Bold"></Label>
+            <ListView Grid.Row="1" Name="GridMapping">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Колонка">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Header}" FontWeight="Bold"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Параметр">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Width="100" SelectedItem="{Binding Path=Parametre}" Loaded="ComboBox_Loaded"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Пример Значений" Width="500" DisplayMemberBinding="{Binding Path=Example}" />
+                        <GridViewColumn Header="Ошибки данных" Width="320">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Error}" FontWeight="Bold" Foreground="Red"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <!--<DataGrid Grid.Row="1" Name="GridMapping" AutoGenerateColumns="False" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True" Header="Колонка" Binding="{Binding Path=Header}"/>
+                    <DataGridComboBoxColumn x:Name="comboboxParametre" IsReadOnly="False" Header="Параметр" SelectedItemBinding="{Binding Path=Parametre}">
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <EventSetter Event="SelectionChanged" Handler="SomeSelectionChanged" />
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="Пример Значений" Binding="{Binding Path=Example}" Width="*"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Ошибки данных" Binding="{Binding Path=Error}"/>
+                </DataGrid.Columns>
+            </DataGrid>-->
+            <WrapPanel Grid.Row="2" HorizontalAlignment="Right">
+                <Button Width="130" Margin="2,2,2,2" Click="OkButton_Click">
+                    <WrapPanel>
+                        <Image Source="Images/Ok-48.png" Width="30"/>
+                        <Label HorizontalAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" FontWeight="Bold">ОК</Label>
+                    </WrapPanel>
+                </Button>
+                <Button Width="130" Margin="2,2,2,2" Click="CancelButton_Click">
+                    <WrapPanel>
+                        <Image Source="Images/Cancel-48.png" Width="30"/>
+                        <Label HorizontalAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" FontWeight="Bold">Отмена</Label>
+                    </WrapPanel>
+                </Button>
+            </WrapPanel>
+        </Grid>
+        <Grid Name="Table" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label FontSize="30" Content="{Binding ElementName=NameFile, Path=Content}" HorizontalAlignment="Center" FontWeight="Bold"></Label>
+            <DataGrid Grid.Row="1" Name="GridTable" AutoGenerateColumns="True">
+                
+            </DataGrid>
+            <DockPanel Grid.Row="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel HorizontalAlignment="Center" Grid.ColumnSpan="2">
+                        <Button Margin="1,2,1,2" Width="25"  Click="PrevPageButton_Click">
+                            <Image Source="Images/Previous-48.png"/>
+                        </Button>
+                        <WrapPanel Name="Pages" VerticalAlignment="Center">
+                        </WrapPanel>
+                        <Button Margin="1,2,1,2" Width="25" Click="NextPageButton_Click">
+                            <Image Source="Images/Next-48.png"/>
+                        </Button>
+                    </WrapPanel>
+                    <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                        <Button Width="100" Content="Предыдущей" Margin="1,2,1,2" Click="PButton_Click"></Button>
+                        <Button Width="100" Content="Следующий" Margin="1,2,1,2" Click="NButton_Click"></Button>
+                    </WrapPanel>
+                    <Button Margin="0,0,5,5" Click="CancelButton_Click" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="200" Content="Вернуться на главную форму"></Button>
+                </Grid>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</Window>
